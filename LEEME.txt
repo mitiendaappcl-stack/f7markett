@@ -1,0 +1,17 @@
+F7 MARKETT — tienda + panel
+===========================
+Es una copia rediseñada de la tienda de loucs.store (rojo y negro, otra animación
+de inicio y otra distribución). La lógica es la misma: catálogo, panel /admin.html,
+pedidos por WhatsApp.
+
+IMPORTANTE
+- Sube esto a un repositorio NUEVO de GitHub (por ejemplo "f7markett").
+  NO lo subas encima del repositorio de loucs-store: lo reemplazaría.
+- Todavía no está conectada a su propio panel real. Para que el dueño pueda
+  publicar hay que hacer la guía GUIA-NUEVO-CLIENTE.txt (Parte A una sola vez y
+  luego la Parte B con estos datos):
+      storeId ................ f7markett   (ya puesto en js/config.js)
+      carpeta de Cloudinary .. f7markett   (ya puesta en js/config.js)
+      subdominio sugerido .... f7.mitiendaapp.cl
+- Antes de entregarla: entra al panel, cambia Ajustes (WhatsApp real,
+  nombre e Instagram), quita las zapatillas de ejemplo y sube las del cliente.

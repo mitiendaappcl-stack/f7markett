@@ -1,0 +1,67 @@
+GUÍA CORTA: AGREGAR UN CLIENTE NUEVO (sin tocar loucs.store)
+============================================================
+Todos los clientes comparten el mismo Firebase y el mismo Cloudinary.
+Cada cliente tiene: su subdominio, su repositorio, su "storeId" y su carpeta de fotos.
+
+Ejemplo usado abajo:  cliente = "marca2"
+  subdominio ........ marca2.mitiendaapp.cl
+  storeId ........... marca2
+  correo del dueño .. dueno@gmail.com
+
+
+PARTE A: UNA SOLA VEZ (preparar todo; loucs sigue igual)
+--------------------------------------------------------
+A1. GitHub → repo loucs-store → carpeta js → catalog.js → lápiz → pega el
+    catalog.js nuevo → Commit changes.
+A2. Mismo repo → js/config.js → lápiz → pega el config.js nuevo (trae la línea
+    storeId: 'main') → Commit changes.
+    (loucs funciona igual: 'main' es lo que ya usaba.)
+A3. Firebase → Firestore Database → pestaña Reglas. NO borres lo que hay.
+    Pega este bloque nuevo justo antes de las dos últimas llaves "}  }":
+
+      match /stores/{storeId} {
+        allow write: if request.auth != null
+          && get(/databases/$(database)/documents/admins/$(request.auth.token.email)).data.store == storeId;
+      }
+
+    Pulsa Publicar. (Las reglas se suman: la regla de loucs no cambia.)
+A4. Comprueba: loucs.mitiendaapp.cl/admin.html sigue publicando bien.
+A5. GitHub → repo loucs-store → Settings → marca "Template repository".
+
+
+PARTE B: CADA CLIENTE NUEVO (unos 10 minutos)
+---------------------------------------------
+B1. GitHub → repo loucs-store → botón verde "Use this template" →
+    Create a new repository → nombre: marca2 → Create.
+B2. En el repo nuevo, edita js/config.js y cambia SOLO estas dos cosas:
+      storeId: 'marca2',
+      folder:  'marca2',        (dentro de cloudinary)
+    Commit changes.
+B3. Firebase → Authentication → Users → Add user: correo del dueño
+    (dueno@gmail.com) y una contraseña. Entrégale esos datos.
+B4. Firebase → Firestore Database → Start collection (o "+" si ya existe):
+      Collection ID ... admins
+      Document ID ..... dueno@gmail.com     (TODO EN MINÚSCULAS)
+      Campo ........... store   Tipo: string   Valor: marca2
+B5. Vercel → Add New → Project → importa el repo marca2 → Framework "Other"
+    → Deploy.
+B6. Vercel → ese proyecto → Settings → Domains → Add: marca2.mitiendaapp.cl
+    Copia el valor CNAME que te muestra.
+B7. Cloudflare → mitiendaapp.cl → DNS → Add record:
+      Type CNAME · Name marca2 · Target (el valor de Vercel) · DNS only (nube gris)
+B8. Firebase → Authentication → Configuración → Dominios autorizados →
+    Agregar: marca2.mitiendaapp.cl
+B9. Prueba: marca2.mitiendaapp.cl/admin.html → entra con el correo del dueño →
+    quita (✕) las zapatillas de ejemplo, agrega las suyas, Ajustes (nombre y
+    WhatsApp) → Publicar.
+
+
+IMPORTANTE
+----------
+- Hasta que el dueño publique por primera vez, su tienda muestra el catálogo de
+  ejemplo de loucs. Hazlo antes de darle el enlace a sus clientes.
+- El diseño, logo y textos de la landing son los de loucs.store. Para un cliente
+  con otra marca hay que cambiar el logo y colores en su repo (pídeme una
+  plantilla en blanco cuando llegue el primero).
+- Vercel Hobby es para uso no comercial. Si cobras a los clientes, usa Vercel Pro.
+- Nunca compartas el API Secret de Cloudinary ni borres el documento "main".

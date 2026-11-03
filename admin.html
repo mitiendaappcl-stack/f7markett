@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel — F7 Markett</title>
+  <link rel="icon" type="image/png" href="img/logo-64.png">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<main class="login" data-view="login" hidden>
+  <form class="login__card" data-login-form autocomplete="on">
+    <img class="login__logo" src="img/logo-96.webp" width="72" height="72" alt="">
+    <h1>Panel de la tienda</h1>
+    <p class="muted" data-login-hint>Entra para cambiar precios y zapatillas.</p>
+    <label class="field" data-email-field>
+      <span>Correo</span>
+      <input type="email" name="email" autocomplete="username" placeholder="tu@correo.com">
+    </label>
+    <label class="field">
+      <span>Contraseña</span>
+      <input type="password" name="password" autocomplete="current-password" required placeholder="••••••••">
+    </label>
+    <p class="error" data-login-error role="alert" hidden></p>
+    <button class="btn btn--primary btn--block" type="submit">Entrar</button>
+    <button class="link" type="button" data-reset hidden>Olvidé mi contraseña</button>
+  </form>
+</main>
+
+<!-- ============ PANEL ============ -->
+<div class="app" data-view="app" hidden>
+  <header class="top">
+    <div class="top__brand">
+      <img src="img/logo-96.webp" width="40" height="40" alt="">
+      <div><strong data-store-name>F7 Markett</strong><small>Panel de administración</small></div>
+    </div>
+    <div class="top__actions">
+      <a class="btn btn--ghost" href="index.html" target="_blank" rel="noopener">Ver tienda ↗</a>
+      <button class="btn btn--ghost" type="button" data-open-settings>Ajustes</button>
+      <button class="btn btn--ghost" type="button" data-logout>Salir</button>
+    </div>
+  </header>
+
+  <p class="demo" data-demo hidden>
+    <b>Modo demo.</b> Los cambios se guardan solo en este navegador. Para publicarlos para todos, conecta Firebase (ver LEEME.txt).
+    <button class="link" type="button" data-reset-demo>Restaurar catálogo inicial</button>
+  </p>
+
+  <main class="wrap">
+    <section class="intro">
+      <div>
+        <h2>Tus zapatillas</h2>
+        <p class="muted" data-summary></p>
+      </div>
+      <button class="btn btn--primary" type="button" data-add>＋ Agregar zapatilla</button>
+    </section>
+
+    <div class="tools">
+      <label class="search"><span class="sr">Buscar</span>
+        <input type="search" placeholder="Buscar por nombre o color…" data-search></label>
+      <div class="seg" data-seg role="group" aria-label="Marca">
+        <button type="button" data-brand="all" aria-pressed="true">Todas</button>
+        <button type="button" data-brand="nike" aria-pressed="false">Nike</button>
+        <button type="button" data-brand="jordan" aria-pressed="false">Jordan</button>
+      </div>
+    </div>
+    <p class="hint">El orden de esta lista es el orden de la tienda: la primera es la que se ve grande al entrar. Usa las flechas ▲▼ para moverlas.</p>
+
+    <ul class="list" data-list></ul>
+    <p class="empty" data-empty hidden>No hay zapatillas que coincidan.</p>
+  </main>
+
+  <!-- Barra de publicar -->
+  <div class="publish" data-publish hidden>
+    <div><b data-dirty-count>0 cambios</b><span class="muted"> sin publicar</span></div>
+    <div class="publish__btns">
+      <button class="btn btn--ghost" type="button" data-discard>Descartar</button>
+      <button class="btn btn--primary" type="button" data-publish-btn>Publicar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FORMULARIO DE ZAPATILLA ============ -->
+<dialog class="dlg" data-dlg-product>
+  <form method="dialog" class="dlg__form" data-product-form novalidate>
+    <header class="dlg__head">
+      <h3 data-dlg-title>Agregar zapatilla</h3>
+      <button class="x" type="button" data-close aria-label="Cerrar">✕</button>
+    </header>
+
+    <div class="photo">
+      <label class="photo__drop" data-drop>
+        <input type="file" accept="image/*" data-file hidden>
+        <img data-preview alt="" hidden>
+        <span class="photo__empty" data-photo-empty>
+          <b>＋ Subir foto</b>
+          <small>De frente o en diagonal, la zapatilla completa</small>
+        </span>
+      </label>
+      <div class="photo__opts" data-bg-opts hidden>
+        <span class="lbl">Fondo de la foto</span>
+        <div class="seg seg--sm" data-bg-seg role="group">
+          <button type="button" data-bg="none" aria-pressed="false">Dejar</button>
+          <button type="button" data-bg="flat" aria-pressed="true">Quitar (liso)</button>
+          <button type="button" data-bg="ai" aria-pressed="false">Quitar (IA)</button>
+        </div>
+        <small class="muted" data-bg-note></small>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <label class="field"><span>Marca</span>
+        <select name="brand"><option value="nike">Nike</option><option value="jordan">Jordan</option></select></label>
+      <label class="field"><span>Precio (CLP)</span>
+        <input name="price" inputmode="numeric" placeholder="149.990" required></label>
+      <label class="field"><span>Modelo</span>
+        <input name="name" placeholder="Air Jordan 4" required maxlength="40"></label>
+      <label class="field"><span>Detalle <em>(opcional)</em></span>
+        <input name="detail" placeholder="Retro" maxlength="30"></label>
+      <label class="field"><span>Color / versión</span>
+        <input name="color" placeholder="Pure Money" required maxlength="40"></label>
+      <label class="field"><span>Color de acento</span>
+        <input name="accent" type="color" value="#e11d2a"></label>
+    </div>
+    <label class="field"><span>Descripción <em>(opcional)</em></span>
+      <textarea name="desc" rows="3" maxlength="220" placeholder="Una o dos frases sobre la zapatilla."></textarea></label>
+
+    <p class="error" data-product-error role="alert" hidden></p>
+    <footer class="dlg__foot">
+      <button class="btn btn--ghost" type="button" data-close>Cancelar</button>
+      <button class="btn btn--primary" type="submit" data-product-save>Guardar</button>
+    </footer>
+  </form>
+</dialog>
+
+<!-- ============ AJUSTES ============ -->
+<dialog class="dlg dlg--sm" data-dlg-settings>
+  <form method="dialog" class="dlg__form" data-settings-form novalidate>
+    <header class="dlg__head"><h3>Ajustes de la tienda</h3><button class="x" type="button" data-close aria-label="Cerrar">✕</button></header>
+    <label class="field"><span>Nombre de la tienda</span><input name="storeName" required maxlength="40"></label>
+    <label class="field"><span>Instagram</span><input name="handle" placeholder="@mitienda" required maxlength="30"></label>
+    <label class="field"><span>WhatsApp para pedidos</span>
+      <input name="phone" inputmode="numeric" placeholder="56912345678" required>
+      <small class="muted">Con código de país, sin “+” ni espacios. Chile: 56 y luego el número.</small></label>
+    <p class="error" data-settings-error role="alert" hidden></p>
+    <footer class="dlg__foot">
+      <button class="btn btn--ghost" type="button" data-close>Cancelar</button>
+      <button class="btn btn--primary" type="submit">Guardar</button>
+    </footer>
+  </form>
+</dialog>
+
+<!-- ============ CONFIRMAR ============ -->
+<dialog class="dlg dlg--sm" data-dlg-confirm>
+  <form method="dialog" class="dlg__form">
+    <h3 data-confirm-title>¿Quitar?</h3>
+    <p class="muted" data-confirm-text></p>
+    <footer class="dlg__foot">
+      <button class="btn btn--ghost" value="no">Cancelar</button>
+      <button class="btn btn--danger" value="yes" data-confirm-yes>Quitar</button>
+    </footer>
+  </form>
+</dialog>
+
+<div class="toast" data-toast role="status" aria-live="polite"></div>
+
+<script src="js/config.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
